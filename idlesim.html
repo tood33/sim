@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Idle Game</title>
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6634765419051431"
+     crossorigin="anonymous"></script>
+    <style>
+        #businesses-container {
+            display: none;
+            position: absolute;
+            top: 50px; /* Adjust this value according to your layout */
+            right: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Simple Idle Game</h1>
+    <p>Money: $<span id="money">0</span></p>
+    <button onclick="earnMoney()">Earn Money</button>
+    <button onclick="toggleBusinesses()">Businesses</button>
+
+    <div id="businesses-container">
+        <h2>Available Businesses</h2>
+        <ul id="business-list">
+            <!-- Business items will be added dynamically here -->
+        </ul>
+    </div>
+
+    <script>
+        let money = 0;
+
+        function earnMoney() {
+            money += 1; // Increment money by 1 each time the button is clicked
+            document.getElementById('money').innerText = money; // Update the money display
+        }
+
+        function toggleBusinesses() {
+            const businessesContainer = document.getElementById('businesses-container');
+            if (businessesContainer.style.display === 'none') {
+                businessesContainer.style.display = 'block';
+                displayBusinesses();
+            } else {
+                businessesContainer.style.display = 'none';
+            }
+        }
+
+        function displayBusinesses() {
+            const businessList = document.getElementById('business-list');
+            businessList.innerHTML = ''; // Clear previous business list
+
+            const businesses = [
+                { name: 'Bakery', cost: 50, income: 1 },
+                { name: 'Farm', cost: 100, income: 2 },
+                { name: 'Factory', cost: 200, income: 5 }
+            ];
+
+            businesses.forEach(business => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>${business.name}</span> 
+                    <button onclick="buyBusiness(${business.cost}, ${business.income})">Buy ($${business.cost})</button>
+                `;
+                businessList.appendChild(listItem);
+            });
+        }
+
+        function buyBusiness(cost, income) {
+            if (money >= cost) {
+                money -= cost;
+                document.getElementById('money').innerText = money;
+                // Increment money automatically based on business income
+                setInterval(() => {
+                    money += income;
+                    document.getElementById('money').innerText = money;
+                }, 1000); // Adjust the interval based on income rate
+            } else {
+                alert("Not enough money to buy this business!");
+            }
+        }
+    </script>
+</body>
+</html>
+
